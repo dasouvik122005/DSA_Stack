@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define N 8
+
+// Stack structure to hold queen positions
+typedef struct {
+    int row, col;
+} Queen;
+
+typedef struct {
+    Queen data[N];
+    int top;
+} Stack;
+
+void push(Stack *s, int row, int col) {
+    s->data[++s->top] = (Queen){row, col};
+}
+
+Queen pop(Stack *s) {
+    return s->data[s->top--];
+}
+
+bool isSafe(Queen placed[], int row, int col, int count) {
+    for (int i = 0; i < count; i++) {
+        if (placed[i].col == col || 
+            placed[i].row - placed[i].col == row - col || 
+            placed[i].row + placed[i].col == row + col) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void printSolution(Queen placed[]) {
+    char board[N][N];
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            board[i][j] = '.';
+    
+    for (int i = 0; i < N; i++)
+        board[placed[i].row][placed[i].col] = 'Q';
+    
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++)
+            printf("%c ", board[i][j]);
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void solveNQueens() {
+    Stack s;
+    s.top = -1;
+    Queen placed[N];
+    int row = 0, col = 0;
+    
+    while (row < N) {
+        bool found = false;
+        while (col < N) {
+            if (isSafe(placed, row, col, row)) {
+                push(&s, row, col);
+                placed[row] = (Queen){row, col};
+                found = true;
+                row++;
+                col = 0;
+                break;
+            }
+            col++;
+        }
+        
+        if (!found) {
+            if (s.top == -1) return; // No solution
+            Queen last = pop(&s);
+            row = last.row;
+            col = last.col + 1;
+        }
+        if (row == N) {
+            printSolution(placed);
+            Queen last = pop(&s);
+            row = last.row;
+            col = last.col + 1;
+        }
+    }
+}
+
+int main() {
+    solveNQueens();
+    return 0;
+}
