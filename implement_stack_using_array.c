@@ -1,0 +1,22 @@
+#include <stdio.h>
+    
+int main() {
+    int top=-1,n;
+    printf("enter the size: ");
+    scanf("%d",&n);
+    int stack[n];
+    if(top==-1){
+        printf("stack is empty...\n");
+        for(int i=0;i<n;i++){
+        top++;
+        printf("enter the value in stack: ");
+        for(i=0;i<n;i++){
+        scanf("%d",&stack[i]);
+        }
+    }
+}
+printf("The elements are: ");
+for(int i=0;i<n;i++){
+    printf("%d\t",stack[i]);
+    }
+}
